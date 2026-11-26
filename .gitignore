@@ -53,3 +53,13 @@ dkms.conf
 
 # debug information files
 *.dwo
+
+# IDE files
+*.idea
+.vscode
+.venv
+git_push.sh
+git_push_msg.sh
+
+# Tests:
+*.log
