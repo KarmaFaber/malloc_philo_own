@@ -18,7 +18,11 @@ MALLOC_DIR := malloc
 PHILO_INC_DIR := $(PHILO_DIR)/inc
 PHILO_SRCS := $(filter-out $(PHILO_DIR)/src/main.c,$(wildcard $(PHILO_DIR)/src/*.c))
 MALLOC_DEBUG_PRINTER := $(MALLOC_DIR)/test/src/debug_printers.c
+ifeq ($(OS),Windows_NT)
+PHILO_MEMORY_BIN := philo_malloc_memory.exe
+else
 PHILO_MEMORY_BIN := philo_malloc_memory
+endif
 PHILO_ARGS ?= 55 800 200 200 2
 TEST_DIR := test
 TEST_LOGS := $(TEST_DIR)/sani.log $(TEST_DIR)/valgrind.log \
@@ -55,11 +59,17 @@ philo-malloc:
 philo-test:
 	$(MAKE) -C $(PHILO_DIR) malloc-test
 
-allocator-test:
-	$(MAKE) -C $(MALLOC_DIR) test
-
 philo-memory-test: $(PHILO_MEMORY_BIN)
 	@./$(PHILO_MEMORY_BIN) $(PHILO_ARGS)
+
+ifeq ($(OS),Windows_NT)
+allocator-test sani valgrind strace test_gdb:
+	@echo "WARNING: '$@' uses Linux-only test tools and is unavailable on Windows."
+	@echo "No tests were run and no log files were created."
+	@exit 1
+else
+allocator-test:
+	$(MAKE) -C $(MALLOC_DIR) test
 
 sani:
 	@echo "$(RED)Running philo with sanitizer...$(RESET)"
@@ -88,6 +98,7 @@ test_gdb:
 		printf 'One or more tests failed; inspect %s/*.log\n' "$(TEST_DIR)"; \
 		exit 1; \
 	fi
+endif
 
 #◉───▣───▢◇▢───▣───◉•◉───▣───▢ Cleanup targets ▢───▣───◉•◉───▣───▢◇▢───▣#
 clean:

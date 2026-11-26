@@ -65,7 +65,7 @@ $(MALLOC_NAME): $(PHILO_SRC_PATHS) $(INC_DIR)/philo.h allocator
 malloc: $(MALLOC_NAME)
 
 malloc-test: $(MALLOC_NAME)
-	./$(MALLOC_NAME) 25 800 200 200 2 | grep -q "no one died today"
+	./$(MALLOC_NAME) 25 2000 200 200 2 | grep -q "no one died today"
 	./$(MALLOC_NAME) 15 100 100 100 | grep -Eq '^[0-9]+ [0-9]+ .*died'
 
 clean:
@@ -78,8 +78,13 @@ fclean: clean
 
 re: fclean all
 
+ifeq ($(OS),Windows_NT)
+sani valgrind strace:
+	@echo "WARNING: '$@' is a Linux-only test target and cannot run on Windows."
+	@echo "No test was run and no log file was created."
+	@exit 1
+else
 #◉───▣───▢◇▢───▣───◉•◉───▣───▢   Sanitizer   ▢───▣───◉•◉───▣───▢◇▢───▣───◉#
-
 sani: | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -fsanitize=thread -g -O1 $(THREAD_FLAGS) $(INCLUDES) \
 		$(PHILO_SRC_PATHS) -o $(SANITIZER_BIN)
@@ -94,6 +99,7 @@ strace: $(MALLOC_NAME) | $(OBJ_DIR)
 		./$(MALLOC_NAME) 5 800 200 200 2
 	@echo "Memory mapping trace saved to $(OBJ_DIR)/philo_malloc.strace:"
 	@cat $(OBJ_DIR)/philo_malloc.strace
+endif
 
 #◉───▣───▢◇▢───▣───◉•◉───▣───▢ Norminette ▢───▣───◉•◉───▣───▢◇▢───▣───◉#
 

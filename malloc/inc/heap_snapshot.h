@@ -15,7 +15,6 @@
 
 # include "malloc.h"
 #include <errno.h>
-#include <sys/mman.h>
 
 /*
 ** Structures for heap snapshot representation

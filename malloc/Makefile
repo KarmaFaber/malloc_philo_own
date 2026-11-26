@@ -126,36 +126,58 @@ re: fclean all
 
 #◉───▣───▢◇▢───▣────◉•◉───▣───▢ Valgrind ▢───▣───◉•◉───▣───▢◇▢───▣───◉#
 
+ifeq ($(OS),Windows_NT)
+valgrind:
+	@echo "WARNING: 'valgrind' is a Linux-only test target and cannot run on Windows."
+	@echo "No test was run and no log file was created."
+	@exit 1
+else
 valgrind: $(TEST_BIN)
 	@echo "$(CURRENT_COLOR)➵⤐──╌╌➣⋆➣╌╌──< Valgrind Test >──╌╌➣⋆➣╌╌──$(RESET)"
 	@mkdir -p test/valgrind_outputs
 	$(VALGRIND) $(TEST_BIN)
 	@-test/sh_files/./open_valgrind_log.sh
 	@echo "$(CURRENT_COLOR)➵⤐╌╌➣⋆➣╌─< Valgrind Completed >─╌➣⋆➣╌╌──$(RESET)"
+endif
 
 clean_valgrind:
 	test/sh_files/./clean_valgrind.sh
 
 #◉───▣───▢◇▢───▣────◉•◉───▣───▢ Strace mem test ▢───▣───◉•◉───▣───▢◇▢───▣───◉#
 
+ifeq ($(OS),Windows_NT)
+test_strace:
+	@echo "WARNING: 'test_strace' is a Linux-only test and cannot run on Windows."
+	@echo "No test was run and no log file was created."
+	@exit 1
+else
 test_strace: all $(TEST_BIN)
 	@echo "$(CURRENT_COLOR)➵⤐──╌╌➣⋆➣╌╌──< Strace Test >──╌╌➣⋆➣╌╌──$(RESET)"
 	@mkdir -p test/strace_outputs
 	$(STRACE) $(TEST_BIN)
 	@-test/sh_files/./open_strace_log.sh
 	@echo "$(CURRENT_COLOR)➵⤐╌╌➣⋆➣╌─< Strace Completed >─╌➣⋆➣╌╌──$(RESET)"
+endif
 
 clean_strace:
 	test/sh_files/./clean_strace.sh
 
 #◉───▣───▢◇▢───▣────◉•◉───▣───▢ Test ▢───▣───◉•◉───▣───▢◇▢───▣───◉#
 
+ifeq ($(OS),Windows_NT)
+test:
+	@echo "WARNING: 'test' is a Linux-only allocator test and cannot run on Windows."
+	@echo "No test was run and no log file was created."
+	@exit 1
+else
 test: $(TEST_BIN)
 	@echo "$(CURRENT_COLOR)➵⤐──╌╌➣⋆➣╌╌── Test──╌╌➣⋆➣╌╌──$(RESET)"
 	@$(TEST_BIN)
 	@echo "$(CURRENT_COLOR)➵⤐╌╌➣⋆➣── End ─╌➣⋆➣╌─$(RESET)"
 
 #◉───▣───▢◇▢───▣────◉•◉───▣───▢ Norminette ▢───▣───◉•◉───▣───▢◇▢───▣───◉#
+
+endif
 
 norm:
 	@echo "$(CURRENT_COLOR)➵⤐──╌╌➣⋆➣╌╌── Checking Norminette ──╌╌➣⋆➣╌╌──$(RESET)"
