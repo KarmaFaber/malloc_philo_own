@@ -21,8 +21,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
-# include <sys/time.h>
-# include <unistd.h>
+# include <time.h>
 
 //#➵⤐──╌╌➣⋆➣╌╌──⤏➵•➵⤐──╌╌➣⋆➣╌╌──Macros  :──╌╌➣⋆➣╌╌──⤏➵•➵⤐──╌╌➣⋆➣╌╌➔#
 
@@ -63,14 +62,18 @@ typedef struct s_program
 	unsigned int		num_times_to_eat;
 	int					dead_p_num;
 	bool				*forks_available;
-	time_t				start_time;
-	time_t				time_to_die;
-	time_t				time_to_eat;
-	time_t				time_to_sleep;
+	long long			start_time;
+	long long			time_to_die;
+	long long			time_to_eat;
+	long long			time_to_sleep;
 	pthread_mutex_t		forks_lock;
 	pthread_mutex_t		*forks;
 	pthread_mutex_t		write_lock;
 	pthread_mutex_t		dead_num_lock;
+	int					forks_mutex_count;
+	bool				forks_lock_initialized;
+	bool				write_lock_initialized;
+	bool				dead_num_lock_initialized;
 	struct s_philo		*philos;
 }						t_program;
 
@@ -80,7 +83,7 @@ typedef struct s_philo
 	unsigned int		meals_eaten;
 	bool				has_fork1;
 	bool				has_fork2;
-	time_t				last_meal;
+	long long			last_meal;
 	pthread_t			thread;
 	t_program			*program;
 
@@ -137,6 +140,7 @@ long long				timestamp(void);
 void					print_action(t_philo *philo, const char *action);
 void					print_dead(t_philo *philo, const char *action);
 void					precise_sleep(t_philo *philo, long long duration);
+void					sleep_microseconds(unsigned int duration);
 void					final_print(t_program *program);
 
 #endif

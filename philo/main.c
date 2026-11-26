@@ -22,7 +22,7 @@
 
 int	main(int argc, char **argv)
 {
-	t_program	program;
+	t_program	program = {0};
 
 	if (!check_argvs(argc, argv))
 		return (1);

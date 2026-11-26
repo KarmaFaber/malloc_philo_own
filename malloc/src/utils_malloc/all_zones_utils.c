@@ -104,15 +104,14 @@ size_t	init_next_free_block(t_zone_ctx *ctx)
  *
  * @param ctx Zone initialization context.
  * @param group Heap group assigned to the zone.
- * @return Aligned payload pointer, or NULL if mmap fails.
+ * @return Aligned payload pointer, or NULL if mapping memory fails.
  */
 void	*create_new_zone(t_zone_ctx *ctx, t_heap_group group)
 {
 	size_t	free_size;
 
-	ctx->zone = (t_zone *)mmap(NULL, ctx->total_size,
-			PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-	if ((void *)ctx->zone == MAP_FAILED)
+	ctx->zone = (t_zone *)allocator_map(ctx->total_size);
+	if (ctx->zone == NULL)
 		return (NULL);
 	free_size = 0;
 	init_first_block(ctx, 0);

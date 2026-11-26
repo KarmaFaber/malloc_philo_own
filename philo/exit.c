@@ -26,26 +26,39 @@ void	free_all(t_program *program)
 	if (program->forks)
 	{
 		i = 0;
-		while (i < program->num_philos)
+		while (i < program->forks_mutex_count)
 		{
 			pthread_mutex_destroy(&program->forks[i++]);
 		}
 		free(program->forks);
+		program->forks = NULL;
+		program->forks_mutex_count = 0;
 	}
-	if (&program->write_lock)
+	if (program->write_lock_initialized)
+	{
 		pthread_mutex_destroy(&program->write_lock);
-	if (&program->dead_num_lock)
+		program->write_lock_initialized = false;
+	}
+	if (program->dead_num_lock_initialized)
+	{
 		pthread_mutex_destroy(&program->dead_num_lock);
-	if (&program->forks_lock)
+		program->dead_num_lock_initialized = false;
+	}
+	if (program->forks_lock_initialized)
 	{
 		pthread_mutex_destroy(&program->forks_lock);
+		program->forks_lock_initialized = false;
 	}
 	if (program->philos)
 	{
 		free(program->philos);
+		program->philos = NULL;
 	}
 	if (program->forks_available)
+	{
 		free(program->forks_available);
+		program->forks_available = NULL;
+	}
 }
 
 /**

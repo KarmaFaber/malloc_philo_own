@@ -29,7 +29,7 @@ bool	take_two_forks(t_philo *philo, int left_fork, int right_fork)
 		fork_taken = take_forks(philo, left_fork, right_fork);
 	else
 	{
-		usleep(20);
+		sleep_microseconds(20);
 		fork_taken = take_forks(philo, right_fork, left_fork);
 	}
 	return (fork_taken);

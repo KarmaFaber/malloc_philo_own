@@ -57,7 +57,7 @@ INCLUDES_TEST   := -I$(TEST_DIR)
 #◉───▣───▢◇▢───▣────◉•◉───▣───▢ malloc srcs ▢───▣───▣───◉•◉───▣───▢◇▢───◉#
 
 SRCS            := \
-                free.c malloc.c mutex.c \
+                free.c malloc.c mutex.c platform.c \
 				show_alloc_mem.c show_alloc_mem_ex.c \
 				\
 				utils_heap/heap_snapshot.c \

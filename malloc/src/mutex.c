@@ -13,6 +13,8 @@
 #include "../inc/malloc.h"
 #include "../inc/heap_snapshot.h"
 
+#include <errno.h>
+
 static pthread_mutex_t	g_malloc_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 /**

@@ -33,10 +33,15 @@ static int	sub_init_program(t_program *program, char **argv)
 		program->num_times_to_eat = -1;
 	if (argv[5] && program->num_times_to_eat == 0)
 		return (printf("%s", STR_ERR_INP), 0);
-	if ((pthread_mutex_init(&program->write_lock, NULL) != 0)
-		|| (pthread_mutex_init(&program->dead_num_lock, NULL) != 0)
-		|| (pthread_mutex_init(&program->forks_lock, NULL) != 0))
+	if (pthread_mutex_init(&program->write_lock, NULL) != 0)
 		return (free_all(program), printf("%s", STR_ERR_MUTEX), 0);
+	program->write_lock_initialized = true;
+	if (pthread_mutex_init(&program->dead_num_lock, NULL) != 0)
+		return (free_all(program), printf("%s", STR_ERR_MUTEX), 0);
+	program->dead_num_lock_initialized = true;
+	if (pthread_mutex_init(&program->forks_lock, NULL) != 0)
+		return (free_all(program), printf("%s", STR_ERR_MUTEX), 0);
+	program->forks_lock_initialized = true;
 	program->philos = malloc(sizeof(t_philo) * program->num_philos);
 	if (!program->philos)
 		return (free_all(program), printf("%s", STR_ERR_MALLOC), 0);
@@ -65,6 +70,7 @@ int	init_program(t_program *program, char **argv)
 	{
 		if (pthread_mutex_init(&program->forks[i], NULL) != 0)
 			return (free_all(program), printf("%s", STR_ERR_MUTEX), 0);
+		program->forks_mutex_count++;
 		i++;
 	}
 	program->forks_available = malloc(sizeof(bool) * program->num_philos);
@@ -144,15 +150,15 @@ int	init_philo(t_program *program)
 		program->philos[i].program = program;
 		if (pthread_create(&program->philos[i].thread, NULL,
 				philosopher_routine, &program->philos[i]) != 0)
-			return (free_all(program), clean_pthreads(program, i), 0);
+			return (clean_pthreads(program, i), 0);
 		if (program->philos[i].id < 7)
-			usleep(650);
+			sleep_microseconds(650);
 		else
-			usleep(300);
+			sleep_microseconds(300);
 		i++;
 	}
 	if (program->num_philos % 2 != 0)
-		usleep(100);
+		sleep_microseconds(100);
 	i = 0;
 	while (i < program->num_philos)
 		pthread_join(program->philos[i++].thread, NULL);

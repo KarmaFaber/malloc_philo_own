@@ -12,6 +12,14 @@
 
 #include "philo.h"
 
+#include <errno.h>
+
+#ifdef _WIN32
+# include <windows.h>
+#else
+# include <time.h>
+#endif
+
 /**
  * @brief Returns the current timestamp in milliseconds.
  *
@@ -21,10 +29,30 @@
 
 long long	timestamp(void)
 {
-	struct timeval	tv;
+#ifdef _WIN32
+	return ((long long)GetTickCount64());
+#else
+	struct timespec	now;
 
-	gettimeofday(&tv, NULL);
-	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
+	if (clock_gettime(CLOCK_MONOTONIC, &now) != 0)
+		return (0);
+	return ((long long)now.tv_sec * 1000 + now.tv_nsec / 1000000);
+#endif
+}
+
+void	sleep_microseconds(unsigned int duration)
+{
+#ifdef _WIN32
+	Sleep((duration + 999) / 1000);
+#else
+	struct timespec	request;
+	struct timespec	remaining;
+
+	request.tv_sec = duration / 1000000;
+	request.tv_nsec = (long)(duration % 1000000) * 1000;
+	while (nanosleep(&request, &remaining) == -1 && errno == EINTR)
+		request = remaining;
+#endif
 }
 
 /**
@@ -83,7 +111,7 @@ void	precise_sleep(t_philo *philo, long long duration)
 	{
 		if (philosopher_dead(philo))
 			break ;
-		usleep(10);
+		sleep_microseconds(10);
 	}
 }
 

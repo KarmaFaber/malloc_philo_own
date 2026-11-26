@@ -52,7 +52,7 @@ void	*ft_malloc(size_t size)
 	void	*ptr;
 	long	page_size;
 
-	page_size = sysconf(_SC_PAGESIZE);
+	page_size = allocator_page_size();
 	if (page_size <= 0)
 		return (NULL);
 	if (malloc_lock() != 0)

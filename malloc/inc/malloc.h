@@ -13,6 +13,7 @@
 #ifndef MALLOC_H
 # define MALLOC_H
 
+#include "platform.h"
 /*
 ** Define
 */
@@ -28,8 +29,6 @@
 */
 #include "libft.h"
 #include <stdio.h>
-#include <sys/mman.h>
-#include <unistd.h>
 #include <pthread.h>
 #include <stdint.h>
 

@@ -86,7 +86,7 @@ static void	free_large_zone(t_zone *zone, t_zone *prev)
 		g_zones = zone->next;
 	else
 		prev->next = zone->next;
-	(void)munmap(zone, zone->total_size);
+	(void)allocator_unmap(zone, zone->total_size);
 }
 
 /**

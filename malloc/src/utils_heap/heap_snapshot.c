@@ -65,15 +65,14 @@ static t_heap_snapshot	*map_and_fill(size_t block_capacity,
 	int				result;
 
 	*retry = 0;
-	snapshot = mmap(NULL, mapping_size, PROT_READ | PROT_WRITE,
-			MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-	if (snapshot == MAP_FAILED)
+	snapshot = allocator_map(mapping_size);
+	if (snapshot == NULL)
 		return (NULL);
 	result = fill_snapshot(snapshot, block_capacity, mapping_size, counts);
 	*retry = (result > 0);
 	if (result != 0)
 	{
-		(void)munmap(snapshot, mapping_size);
+		(void)allocator_unmap(snapshot, mapping_size);
 		return (NULL);
 	}
 	return (snapshot);
@@ -117,5 +116,5 @@ t_heap_snapshot	*heap_snapshot_create(void)
 void	heap_snapshot_destroy(t_heap_snapshot *snapshot)
 {
 	if (snapshot)
-		(void)munmap(snapshot, snapshot->mapping_size);
+		(void)allocator_unmap(snapshot, snapshot->mapping_size);
 }
