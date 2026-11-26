@@ -31,28 +31,28 @@
 //#➵⤐──╌╌➣➣╌╌──ERR. MSGS:  :──╌╌➣➣╌╌➔#
 
 # define STR_ERR_INPUT_DIGIT \
-	"\001\033[1;31m\002Error: invalid input \
-(not a valid unsigned integer between 0 and 2147483647).\n\001\033[0m\002"
+	"\033[1;31mError: invalid input \
+(not a valid unsigned integer between 0 and 2147483647).\n\033[0m"
 # define STR_ERR_ARG \
-	"\001\033[1;31m\002Error: incorrect number of arguments.\n\001\033[0m\002"
+	"\033[1;31mError: incorrect number of arguments.\n\033[0m"
 # define STR_ERR_P_NUM \
-	"\001\033[1;31m\002Error:\
-	 incorrect number of philosophers.\n\001\033[0m\002"
+	"\033[1;31mError:\
+	 incorrect number of philosophers.\n\033[0m"
 # define STR_ERR_INP \
-	"\001\033[1;31m\002Error: incorrect input.\n\001\033[0m\002"
+	"\033[1;31mError: incorrect input.\n\033[0m"
 # define STR_ERR_THREAD \
-	"\001\033[1;31m\002Error: Could not create thread.\n\001\033[0m\002"
+	"\033[1;31mError: Could not create thread.\n\033[0m"
 # define STR_ERR_MALLOC \
-	"\001\033[1;31m\002Error: Could not allocate memory.\n\001\033[0m\002"
+	"\033[1;31mError: Could not allocate memory.\n\033[0m"
 # define STR_ERR_MUTEX \
-	"\001\033[1;31m\002Error: Could not create mutex.\n\001\033[0m\002"
+	"\033[1;31mError: Could not create mutex.\n\033[0m"
 
 //#➵⤐─╌╌➣➣╌╌──PHILO. MSGS:  :─╌➣➣╌╌➔#
 # define TAKE_FORK "has taken a fork"
 # define EAT "is eating"
 # define SLEEP "is sleeping"
 # define THINK "is thinking"
-# define DIE "\001\033[1;31m\002died\001\033[0m\002"
+# define DIE "\033[1;31mdied\033[0m"
 
 //#➵⤐──╌╌➣⋆➣╌─⤏➵•➵⤐──╌╌➣⋆➣╌╌──Structures  :──╌╌➣⋆➣╌╌⤏➵•➵⤐──╌╌➣⋆➣╌╌➔#
 

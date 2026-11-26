@@ -15,6 +15,14 @@
 #define THREAD_COUNT 15
 #define ALLOCATIONS_PER_THREAD 300
 
+/**
+ * @brief Allocates, checks, and frees one test block.
+ *
+ * @param size Requested allocation size in bytes.
+ * @param iteration Current allocation iteration.
+ * @param seed Worker-specific value used in the test pattern.
+ * @return 0 if the block passes validation, otherwise -1.
+ */
 static int	run_allocation(size_t size, size_t iteration, size_t seed)
 {
 	unsigned char	*ptr;
@@ -34,6 +42,12 @@ static int	run_allocation(size_t size, size_t iteration, size_t seed)
 	return (0);
 }
 
+/**
+ * @brief Runs repeated allocations for one worker thread.
+ *
+ * @param arg Pointer to the worker's thread arguments.
+ * @return NULL when the worker finishes.
+ */
 static void	*allocation_worker(void *arg)
 {
 	size_t	seed;
@@ -57,6 +71,13 @@ static void	*allocation_worker(void *arg)
 	return (NULL);
 }
 
+/**
+ * @brief Starts the allocator test worker threads.
+ *
+ * @param threads Array in which created thread handles are stored.
+ * @param args Array of arguments passed to the worker threads.
+ * @return Number of threads successfully created.
+ */
 static size_t	start_threads(pthread_t threads[], struct s_thread_args args[])
 {
 	size_t	created;
@@ -74,6 +95,14 @@ static size_t	start_threads(pthread_t threads[], struct s_thread_args args[])
 	return (created);
 }
 
+/**
+ * @brief Joins workers and checks their allocation results.
+ *
+ * @param threads Array of worker thread handles.
+ * @param args Array containing each worker's result.
+ * @param created Number of threads that were created.
+ * @return 1 if all workers join and pass, otherwise 0.
+ */
 static int	join_threads(pthread_t threads[], struct s_thread_args args[],
 		size_t created)
 {
@@ -93,6 +122,11 @@ static int	join_threads(pthread_t threads[], struct s_thread_args args[],
 	return (passed);
 }
 
+/**
+ * @brief Tests concurrent allocations and frees across worker threads.
+ *
+ * @return void
+ */
 void	thread_test(void)
 {
 	pthread_t				threads[THREAD_COUNT];

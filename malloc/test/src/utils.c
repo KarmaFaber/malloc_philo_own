@@ -14,11 +14,25 @@
 
 static int	g_test_failures;
 
+/**
+ * @brief Writes a null-terminated string to standard output.
+ *
+ * @param text String to write.
+ * @return void
+ */
 static void	write_text(const char *text)
 {
 	(void)write(1, text, strlen(text));
 }
 
+/**
+ * @brief Prints a test result and records failures.
+ *
+ * @param label Description of the check.
+ * @param passed Nonzero if the check passed.
+ * @param detail Failure detail, or NULL for no additional message.
+ * @return void
+ */
 static void	report_result(const char *label, int passed, const char *detail)
 {
 	if (passed)
@@ -37,6 +51,12 @@ static void	report_result(const char *label, int passed, const char *detail)
 	write_text(C_RESET "\n");
 }
 
+/**
+ * @brief Validates a zone's block chain and free-space accounting.
+ *
+ * @param zone Zone whose accounting is checked.
+ * @return 1 if the zone is consistent, otherwise 0.
+ */
 static int	zone_accounting_valid(t_zone *zone)
 {
 	t_block	*block;
@@ -73,6 +93,13 @@ static int	zone_accounting_valid(t_zone *zone)
 	return (0);
 }
 
+/**
+ * @brief Finds the zone containing a pointer.
+ *
+ * @param ptr Pointer whose zone is requested.
+ * @param valid_list Receives 0 if the zone chain is invalid.
+ * @return The containing zone, or NULL if none is found.
+ */
 static t_zone	*find_pointer_zone(void *ptr, int *valid_list)
 {
 	t_zone	*zone;
@@ -97,6 +124,13 @@ static t_zone	*find_pointer_zone(void *ptr, int *valid_list)
 	return (NULL);
 }
 
+/**
+ * @brief Finds the block whose payload starts at a pointer.
+ *
+ * @param zone Zone whose blocks are searched.
+ * @param ptr Payload pointer to find.
+ * @return Matching block, or NULL if no block matches.
+ */
 static t_block	*find_pointer_block(t_zone *zone, void *ptr)
 {
 	t_block	*block;
@@ -120,11 +154,23 @@ static t_block	*find_pointer_block(t_zone *zone, void *ptr)
 	return (NULL);
 }
 
+/**
+ * @brief Reports a test result without additional failure details.
+ *
+ * @param label Description of the check.
+ * @param passed Nonzero if the check passed.
+ * @return void
+ */
 void	test_report_result(const char *label, int passed)
 {
 	report_result(label, passed, NULL);
 }
 
+/**
+ * @brief Prints the allocator test suite summary.
+ *
+ * @return void
+ */
 void	test_print_summary(void)
 {
 	if (g_test_failures == 0)
@@ -136,11 +182,24 @@ void	test_print_summary(void)
 			C_RESET "\n");
 }
 
+/**
+ * @brief Returns the number of failed allocator checks.
+ *
+ * @return Number of failed checks.
+ */
 int	test_failure_count(void)
 {
 	return (g_test_failures);
 }
 
+/**
+ * @brief Checks whether a pointer matches its expected allocation state.
+ *
+ * @param label Description of the pointer check.
+ * @param ptr Pointer to inspect.
+ * @param should_be_allocated Nonzero if the pointer should be allocated.
+ * @return void
+ */
 void	test_check_pointer_state(const char *label, void *ptr,
 		int should_be_allocated)
 {
@@ -188,6 +247,11 @@ void	test_check_pointer_state(const char *label, void *ptr,
 		"block state does not match allocation/free");
 }
 
+/**
+ * @brief Prints a separator line.
+ *
+ * @return void
+ */
 void	print_sep(void)
 {
 	ft_putstr_fd(C_DIM, 1);
@@ -195,7 +259,13 @@ void	print_sep(void)
 	ft_putstr_fd(C_RESET, 1);
 }
 
-
+/**
+ * @brief Prints a colored stage message.
+ *
+ * @param msg Message to print.
+ * @param color ANSI color sequence to use.
+ * @return void
+ */
 void	print_stage(const char *msg, const char *color)
 {
 	write_text(color);

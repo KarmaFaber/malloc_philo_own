@@ -12,6 +12,11 @@
 
 #include "inc/test.h"
 
+/**
+ * @brief Runs the allocator test suite and reports its result.
+ *
+ * @return 0 if all tests pass, otherwise 1.
+ */
 int	main(void)
 {
 	basic_test();

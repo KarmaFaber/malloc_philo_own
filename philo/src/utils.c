@@ -40,6 +40,12 @@ long long	timestamp(void)
 #endif
 }
 
+/**
+ * @brief Pauses the current thread for the requested duration.
+ *
+ * @param duration Sleep duration in microseconds.
+ * @return void
+ */
 void	sleep_microseconds(unsigned int duration)
 {
 #ifdef _WIN32
@@ -126,6 +132,6 @@ void	final_print(t_program *program)
 {
 	if (program->dead_p_num <= 0)
 	{
-		printf("\001\033[1;32m\002no one died today\n\001\033[0m\002");
+		printf("\033[1;32mno one died today\n\033[0m");
 	}
 }

@@ -12,6 +12,15 @@
 
 #include "inc/test.h"
 
+/**
+ * @brief Checks whether two address ranges overlap.
+ *
+ * @param a Start address of the first range.
+ * @param a_size Size of the first range in bytes.
+ * @param b Start address of the second range.
+ * @param b_size Size of the second range in bytes.
+ * @return 1 if the ranges overlap or an address calculation overflows.
+ */
 static int	ranges_overlap(void *a, size_t a_size, void *b, size_t b_size)
 {
 	uintptr_t	a_start;
@@ -24,6 +33,11 @@ static int	ranges_overlap(void *a, size_t a_size, void *b, size_t b_size)
 	return (a_start < b_start + b_size && b_start < a_start + a_size);
 }
 
+/**
+ * @brief Tests allocations around allocator size boundaries.
+ *
+ * @return void
+ */
 static void	check_boundary_allocations(void)
 {
 	const size_t	sizes[] = {1, 15, 16, 17, 1024, 1025, 16384, 16385};
@@ -81,6 +95,11 @@ static void	check_boundary_allocations(void)
 	}
 }
 
+/**
+ * @brief Tests zero-sized and maximum-sized allocation requests.
+ *
+ * @return void
+ */
 static void	check_extreme_sizes(void)
 {
 	void			*ptr;
@@ -95,6 +114,11 @@ static void	check_extreme_sizes(void)
 	free(ptr);
 }
 
+/**
+ * @brief Runs boundary and extreme-size allocator tests.
+ *
+ * @return void
+ */
 void	extreme_test(void)
 {
 	ft_putstr_fd(TEST_BANNER_EDGE, 1);

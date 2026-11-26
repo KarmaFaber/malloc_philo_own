@@ -9,6 +9,11 @@
 # include <unistd.h>
 #endif
 
+/**
+ * @brief Returns the system memory page size.
+ *
+ * @return Page size in bytes, or -1 if the query fails.
+ */
 long	allocator_page_size(void)
 {
 #ifdef _WIN32
@@ -21,6 +26,12 @@ long	allocator_page_size(void)
 #endif
 }
 
+/**
+ * @brief Reserves a writable memory region.
+ *
+ * @param size Number of bytes to reserve.
+ * @return Pointer to the region, or NULL if the reservation fails.
+ */
 void	*allocator_map(size_t size)
 {
 #ifdef _WIN32
@@ -42,6 +53,13 @@ void	*allocator_map(size_t size)
 #endif
 }
 
+/**
+ * @brief Releases a previously reserved memory region.
+ *
+ * @param address Start address of the region.
+ * @param size Size of the region in bytes.
+ * @return 0 on success, or -1 if the region cannot be released.
+ */
 int	allocator_unmap(void *address, size_t size)
 {
 #ifdef _WIN32

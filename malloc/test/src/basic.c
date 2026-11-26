@@ -12,6 +12,11 @@
 
 #include "inc/test.h"
 
+/**
+ * @brief Tests basic allocations, memory reports, and frees.
+ *
+ * @return void
+ */
 void	basic_test(void)
 {
 	int				*num;

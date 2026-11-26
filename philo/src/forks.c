@@ -13,7 +13,7 @@
 #include "philo.h"
 
 /**
- * @brief Attempts to take two forks in a specific order based on philosopher ID.
+ * @brief Attempts to take two forks in an order based on the philosopher ID.
  *
  * @param philo Pointer to the philosopher.
  * @param left_fork Index of the left fork.

@@ -63,3 +63,6 @@ git_push_msg.sh
 
 # Tests:
 *.log
+/philo/obj/
+/philo/philo_malloc
+/philo_malloc_memory

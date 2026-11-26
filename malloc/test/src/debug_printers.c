@@ -12,6 +12,12 @@
 
 #include "inc/test.h"
 
+/**
+ * @brief Writes a null-terminated string to standard output.
+ *
+ * @param s String to write; NULL is ignored.
+ * @return void
+ */
 static void	put_str(const char *s)
 {
 	size_t	len;
@@ -24,6 +30,12 @@ static void	put_str(const char *s)
 	(void)write(1, s, len);
 }
 
+/**
+ * @brief Gets the display name for a heap group.
+ *
+ * @param group Heap group to name.
+ * @return Group name, or "UNKNOWN" for an unrecognized group.
+ */
 static const char	*group_name(t_heap_group group)
 {
 	if (group == TINY)
@@ -35,6 +47,12 @@ static const char	*group_name(t_heap_group group)
 	return ("UNKNOWN");
 }
 
+/**
+ * @brief Gets the display color for a heap group.
+ *
+ * @param group Heap group whose color is requested.
+ * @return ANSI color sequence for the group.
+ */
 static const char	*group_color(t_heap_group group)
 {
 	if (group == TINY)
@@ -46,17 +64,32 @@ static const char	*group_color(t_heap_group group)
 	return (C_RESET);
 }
 
-static int	is_valid_block_offset(t_zone *zone, uint32_t offset)
+/**
+ * @brief Checks whether a block offset points forward within its zone.
+ *
+ * @param zone Zone containing the block chain.
+ * @param current_offset Offset of the current block.
+ * @param next_offset Offset of the next block.
+ * @return 1 if the next offset is valid, otherwise 0.
+ */
+static int	is_valid_block_offset(t_zone *zone, uint32_t current_offset,
+		uint32_t next_offset)
 {
-	if (offset == 0)
+	if (next_offset == 0 || next_offset <= current_offset
+		|| (size_t)(next_offset - current_offset) < sizeof(t_block))
 		return (0);
-	if ((size_t)offset <= sizeof(t_zone))
+	if (zone->total_size < sizeof(t_block))
 		return (0);
-	if ((size_t)offset + sizeof(t_block) > zone->total_size)
+	if ((size_t)next_offset > zone->total_size - sizeof(t_block))
 		return (0);
 	return (1);
 }
 
+/**
+ * @brief Prints the linked list of allocator zones.
+ *
+ * @return void
+ */
 void	debug_print_zones_chain(void)
 {
 	t_zone	*curr;
@@ -82,6 +115,11 @@ void	debug_print_zones_chain(void)
 	put_str("NULL\n");
 }
 
+/**
+ * @brief Prints allocator zones and each zone's linked block list.
+ *
+ * @return void
+ */
 void	debug_dump_state(void)
 {
 	t_zone		*curr;
@@ -115,7 +153,8 @@ void	debug_dump_state(void)
 		{
 			block = (t_block *)((char *)curr + sizeof(t_zone));
 			block_idx = 0;
-			while (block_idx < 32)
+			offset = sizeof(t_zone);
+			while (1)
 			{
 				n = snprintf(buf, sizeof(buf),
 						"    %sBlock %d (%p): size=%zu | is_free=%d | "
@@ -126,9 +165,10 @@ void	debug_dump_state(void)
 						block->prev_offset, C_RESET);
 				if (n > 0)
 					(void)write(1, buf, (size_t)n);
-				offset = block->next_offset;
-				if (!is_valid_block_offset(curr, offset))
+				if (!is_valid_block_offset(curr, offset,
+						block->next_offset))
 					break ;
+				offset = block->next_offset;
 				block = (t_block *)((char *)curr + offset);
 				block_idx++;
 			}

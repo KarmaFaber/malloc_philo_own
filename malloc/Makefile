@@ -11,7 +11,9 @@ endif
 
 NAME            = libft_malloc_$(HOSTTYPE).so
 LIB_NAME        = libft_malloc.so
+STATIC_LIB      = libft_malloc.a
 CC              = gcc
+AR              = ar
 CFLAGS          = -Wall -Wextra -Werror -fPIC
 FLAGS_LIB       = -shared
 THREAD_FLAGS    := -pthread
@@ -84,8 +86,13 @@ OBJS        := $(addprefix $(OBJ_DIR)/, $(SRCS:.c=.o))
 
 all: $(LIBFT) $(NAME) $(LIB_NAME)
 
+static: $(LIBFT) $(STATIC_LIB)
+
 $(LIBFT):
 	$(MAKE) -C $(LIBFT_DIR)
+
+$(STATIC_LIB): $(OBJS)
+	$(AR) rcs $@ $(OBJS)
 
 $(NAME): $(LIBFT) $(OBJS)
 	$(CC) $(CFLAGS) $(THREAD_FLAGS) $(FLAGS_LIB) -o $(NAME) $(OBJS) -L$(LIBFT_DIR) -lft
@@ -111,7 +118,7 @@ clean:
 	@echo "$(CURRENT_COLOR) 🧹 All object files have been cleaned.\n$(RESET)"
 
 fclean: clean
-	$(RM) $(NAME) $(LIB_NAME) $(TEST_BIN)
+	$(RM) $(NAME) $(LIB_NAME) $(STATIC_LIB) $(TEST_BIN)
 	@$(MAKE) -C $(LIBFT_DIR) fclean
 	@echo "$(CURRENT_COLOR) 🧹 $(NAME) & $(LIB_NAME): have been cleaned.\n$(RESET)"
 
@@ -162,4 +169,4 @@ format:
 
 #◉───▣───▢◇▢───▣────◉•◉───▣───▢ Phony targets ▢───▣───◉•◉───▣───▢◇▢───▣───◉#
 
-.PHONY: all clean fclean re valgrind clean_valgrind test_strace clean_strace test norm format
+.PHONY: all static clean fclean re valgrind clean_valgrind test_strace clean_strace test norm format

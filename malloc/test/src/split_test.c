@@ -12,6 +12,14 @@
 
 #include "inc/test.h"
 
+/**
+ * @brief Fills a byte buffer with the specified value.
+ *
+ * @param buf Buffer to fill; NULL is ignored.
+ * @param len Number of bytes to fill.
+ * @param val Byte value to write.
+ * @return void
+ */
 static void	fill_pattern(unsigned char *buf, size_t len, unsigned char val)
 {
 	size_t	i;
@@ -26,6 +34,11 @@ static void	fill_pattern(unsigned char *buf, size_t len, unsigned char val)
 	}
 }
 
+/**
+ * @brief Tests allocations, frees, and block splitting.
+ *
+ * @return void
+ */
 void	split_test(void)
 {
 	unsigned char	*t1;

@@ -106,4 +106,4 @@ Bash
 ## 📚 Resources & Integrity
 
 * **POSIX Standard**: IEEE Std 1003.1 POSIX Threads Base Definitions (`pthread_create`, `pthread_mutex_lock`, `pthread_mutex_unlock`).
-* **AI Tool Disclosure**: AI utilities were used to evaluate mutex locking order models and edge-case testing matrices (e.g., verifying boundary timing under high-load CPU throttling). Thread loop routines, synchronization logic, and memory safety checks were authored and tested directly
+* **AI Usage Disclosure**: See the repository's [AI Usage Disclosure](../README.md#ai-usage-disclosure).
